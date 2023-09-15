@@ -17,6 +17,7 @@ dataFrame = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/expo
                        parse_dates=['DataPesquisada'])
 
 app = Dash(__name__)
+server = app.server
 
 # App layout
 app.layout = html.Div([
