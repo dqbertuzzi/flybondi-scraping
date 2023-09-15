@@ -19,12 +19,7 @@ app.layout = html.Div([
     html.Div(children='Escolha Data de Ida e Volta:'),
     html.Br(),
     dcc.RadioItems(options=dataFrame['IdaVolta'].unique(), value=dataFrame['IdaVolta'].unique()[0], id='my-final-radio-item-example'),
-    dcc.Graph(figure={}, id='my-final-graph-example'),
-    dcc.Interval(
-    id='interval-component',
-        interval=1*1000,
-        n_intervals=0
-    )
+    dcc.Graph(figure={}, id='my-final-graph-example')
 ])
 
 # Add controls to build the interaction
