@@ -10,6 +10,7 @@ dataFrame = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/expo
                                                                                                        'IdaVolta':str})
 
 app = Dash(__name__)
+server = app.server
 
 # App layout
 app.layout = html.Div([
