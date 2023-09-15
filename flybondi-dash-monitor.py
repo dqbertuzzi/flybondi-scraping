@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[7]:
-
 
 from datetime import datetime
 import pandas as pd
