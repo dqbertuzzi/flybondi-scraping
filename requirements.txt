@@ -1,5 +1,5 @@
 dash==2.13.0
-pandas==1.5.3
+pandas
 plotly==5.9.0
 datetime
 gunicorn
