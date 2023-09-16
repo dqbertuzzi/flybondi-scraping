@@ -1,6 +1,10 @@
+beautifulsoup4==4.11.1
 dash==2.13.0
+numpy
 pandas
 plotly==5.9.0
+protobuf
+Requests
 datetime
-bs4
 gunicorn
+
