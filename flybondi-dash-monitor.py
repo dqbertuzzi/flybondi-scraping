@@ -65,11 +65,13 @@ def update_graph(col_chosen, stored_dataframe, n_clicks):
     fig.update_traces(marker=dict(size=12),
                       line=dict(width=3),
                       textposition=improve_text_position(dff[dff['IdaVolta']==col_chosen]['Preco']),
-                      textfont_size=10)
-    fig.update(layout_yaxis_range = [dff[dff['IdaVolta']==col_chosen]['Preco'].min()-10,dff[dff['IdaVolta']==col_chosen]['Preco'].max()+10])
+                      textfont_size=14)
+    fig.update(layout_yaxis_range = [dff[dff['IdaVolta']==col_chosen]['Preco'].min()-8,dff[dff['IdaVolta']==col_chosen]['Preco'].max()+8])
     fig.update_xaxes(range=[-1, len(dff[dff['IdaVolta']==col_chosen]['DataPesquisada'].unique())])
 
+    
     return fig
+
 
 if __name__ == '__main__':
     app.run(debug=True)
