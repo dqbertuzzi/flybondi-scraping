@@ -46,7 +46,7 @@ server = app.server
 
 # App layout
 app.layout = html.Div([
-    dcc.Store(id="storage", storage_type="memory", data=dff),
+    dcc.Store(id="storage", storage_type="session", data=dff),
     html.Div(children='Monitor de Preços Flybondi - São Paulo x Buenos Aires'),
     html.Br(),
     html.Button("Atualizar os dados",id='refresh-button', n_clicks=0),
