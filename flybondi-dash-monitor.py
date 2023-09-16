@@ -8,16 +8,41 @@ sheet_id = "18hHWaMBcvorBC9TRqBhG2HcGKpRZBdgZh3OqPw8ASus"
 dataFrame = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv", dtype={'Preco':float,
                                                                                                        'DataPesquisada':str,
                                                                                                        'IdaVolta':str})
+
 dff=dataFrame.to_dict('records')
+
+def getPrices(depDate, retDate):
+    import numpy as np
+    import requests
+    
+    url = f'https://flybondi.com/br/search/results?adults=1&children=0&currency=BRL&departureDate={depDate}&fromCityCode=SAO&infants=0&returnDate={retDate}&toCityCode=BUE&utm_origin=calendar'
+
+    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'})
+
+    soup = bs(page.text, 'html.parser')
+    
+    div_prices = soup.find_all('div', attrs={'class':'jsx-4043887309 flex flex-column flex-auto items-center mr1-m mr2-ns mw4l w-50 w-33-l ph2 pa0-ns'})
+    
+    departurePrice = float(div_prices[0].find('span', attrs={'class':"jsx-2642904360"}).text.replace("R$", "")[:-2].replace(".","")+'.'+div_prices[0].find('span', attrs={'class':"jsx-2642904360"}).text.replace("R$", "")[-2:])
+    returnPrice = float(div_prices[1].find('span', attrs={'class':"jsx-2642904360"}).text.replace("R$", "")[:-2].replace(".","")+'.'+div_prices[1].find('span', attrs={'class':"jsx-2642904360"}).text.replace("R$", "")[-2:])
+    total = departurePrice + returnPrice
+    
+    return [np.round(total,2), depDate, retDate]
+
+def appendData(df, total, depDate, retDate, date):
+    dataFrame = pd.concat([df, pd.DataFrame({'Preco':[total],
+                                                'DataPesquisada':[date],
+                                                'IdaVolta':pd.to_datetime(depDate).strftime("%d/%m/%Y") + " - "+ pd.to_datetime(retDate).strftime("%d/%m/%Y")})],
+                      ignore_index=True)
+    return dataFrame
 
 app = Dash(__name__,
           meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}])
-server = app.server
 
+# App layout
 app.layout = html.Div([
     dcc.Store(id="storage", storage_type="memory", data=dff),
-    #dcc.Interval(id="timer", interval=1000*60, n_intervals=0),
     html.Div(children='Monitor de Preços Flybondi - São Paulo x Buenos Aires'),
     html.Br(),
     html.Button("Atualizar os dados",id='refresh-button', n_clicks=0),
@@ -38,10 +63,16 @@ app.layout = html.Div([
 )
 def refresh_data(n_clicks):
     if n_clicks:
+        date = datetime.now().strftime("%d/%m %H:%M")
         sheet_id = "18hHWaMBcvorBC9TRqBhG2HcGKpRZBdgZh3OqPw8ASus"
         dataFrame = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv", dtype={'Preco':float,
                                                                                                        'DataPesquisada':str,
                                                                                                        'IdaVolta':str})
+
+        dates = [('2023-12-15', '2023-12-21'), ('2023-12-16', '2023-12-22'), ('2023-12-17', '2023-12-23')]
+        for dep_date, ret_date in dates:
+            total, dep_date, ret_date = getPrices(depDate=dep_date, retDate=ret_date)
+            dataFrame = appendData(dataFrame, total, dep_date, ret_date, date=date)
         
     return dataFrame.to_dict('records')
         
