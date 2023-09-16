@@ -51,11 +51,16 @@ def refresh_data(n_clicks):
 )
 def update_graph(col_chosen, stored_dataframe, n_clicks):
     dff = pd.DataFrame.from_records(stored_dataframe)
-        
-    fig = px.bar(dff[dff['IdaVolta']==col_chosen], x='DataPesquisada', y='Preco',
-                 labels={"Preco":"Preço (R$)", "DataPesquisada":"Data/Hora Pesquisada"}, text_auto=True,
-                 title="Histórico de Preços")
-    fig.update_traces(width=.2)
+    
+    fig = px.line(dff[dff['IdaVolta']==col_chosen], x='DataPesquisada', y='Preco',
+                  text="Preco", color_discrete_sequence =['#25291C'],
+                 labels={"Preco":"Preço (R$)", "DataPesquisada":"Data/Hora Pesquisada"}, title="Histórico de Preços")
+    fig.update_traces(marker=dict(size=12),
+                      line=dict(width=3),
+                      textposition="bottom left",
+                      textfont_size=14)
+    fig.update(layout_yaxis_range = [dff[dff['IdaVolta']==col_chosen]['Preco'].min()-10,dff[dff['IdaVolta']==col_chosen]['Preco'].max()+10])
+    
     return fig
 
 
