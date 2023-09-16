@@ -2,6 +2,5 @@ dash==2.13.0
 pandas
 plotly==5.9.0
 datetime
-urllib
 bs4
 gunicorn
