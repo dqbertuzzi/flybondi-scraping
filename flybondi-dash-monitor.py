@@ -5,6 +5,7 @@ import plotly.express as px
 from dash import Dash, html, dash_table, dcc, callback, Output, Input
 import urllib
 from bs4 import BeautifulSoup as bs
+from concurrent.futures import ThreadPoolExecutor
 
 sheet_id = "18hHWaMBcvorBC9TRqBhG2HcGKpRZBdgZh3OqPw8ASus"
 dataFrame = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv", dtype={'Preco':float,
