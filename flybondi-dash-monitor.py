@@ -90,26 +90,29 @@ def refresh_data(n_clicks):
     Input(component_id='refresh-button', component_property='n_clicks')
 )
 def update_graph(col_chosen, stored_dataframe, n_clicks):
-    def improve_text_position(x):
-        positions = ['top center', 'bottom center']  # you can add more: left center ...
-        return [positions[i % len(positions)] for i in range(len(x))]
+    #def improve_text_position(x):
+    #    positions = ['top center', 'bottom center']  # you can add more: left center ...
+    #    return [positions[i % len(positions)] for i in range(len(x))]
     
-   
     dff = pd.DataFrame.from_records(stored_dataframe)
     
     fig = px.line(dff[dff['IdaVolta']==col_chosen], x='DataPesquisada', y='Preco',
-                  text="Preco", color_discrete_sequence =['#25291C'],
-                 labels={"Preco":"Preço (R$)", "DataPesquisada":"Data/Hora Pesquisada"}, title="Histórico de Preços")
-    fig.update_traces(marker=dict(size=12),
-                      line=dict(width=3),
-                      textposition=improve_text_position(dff[dff['IdaVolta']==col_chosen]['Preco']),
-                      textfont_size=14)
+                   color_discrete_sequence =['#25291C'],
+                 labels={"Preco":"Preço (R$)", "DataPesquisada":"Data/Hora Pesquisada"}, title="Histórico de Preços", markers=True)
+    #
+    fig.update_traces(marker=dict(size=10),
+                  line=dict(width=3))
     fig.update(layout_yaxis_range = [dff[dff['IdaVolta']==col_chosen]['Preco'].min()-8,dff[dff['IdaVolta']==col_chosen]['Preco'].max()+8])
-    fig.update_xaxes(range=[-1, len(dff[dff['IdaVolta']==col_chosen]['DataPesquisada'].unique())])
+    fig.update_xaxes(range=[-1, len(dff[dff['IdaVolta']==col_chosen]['DataPesquisada'].unique())+1])
+    fig.add_scatter(x = [fig.data[0].x[-1]], y = [fig.data[0].y[-1]],
+                     mode = 'markers + text',
+                     marker = {'color':'black', 'size':16},
+                     showlegend = False,
+                     text = [fig.data[0].y[-1]],
+                     textposition='top center')
+    fig.update_traces(textfont_size=14)
 
-    
     return fig
-
 
 if __name__ == '__main__':
     app.run(debug=True)
