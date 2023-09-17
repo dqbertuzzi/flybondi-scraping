@@ -5,6 +5,4 @@ pandas
 plotly==5.9.0
 protobuf
 Requests
-datetime
 gunicorn
-
