@@ -1,10 +1,11 @@
 from datetime import datetime
 import pandas as pd
-from dash import Dash, html
-import plotly.express as px
 from dash import Dash, html, dash_table, dcc, callback, Output, Input
-import urllib
+import plotly.express as px
 from bs4 import BeautifulSoup as bs
+import numpy as np
+import requests
+import urllib
 from concurrent.futures import ThreadPoolExecutor
 
 sheet_id = "18hHWaMBcvorBC9TRqBhG2HcGKpRZBdgZh3OqPw8ASus"
