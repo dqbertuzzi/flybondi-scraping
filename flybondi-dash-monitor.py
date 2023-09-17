@@ -34,7 +34,7 @@ def appendData(df, total, depDate, retDate, date):
 def fetch_flight_prices(depDate, retDate):
     url = f'https://flybondi.com/br/search/results?adults=1&children=0&currency=BRL&departureDate={depDate}&fromCityCode=SAO&infants=0&returnDate={retDate}&toCityCode=BUE&utm_origin=calendar'
     page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'})
-    soup = BeautifulSoup(page.text, 'html.parser')
+    soup = bs(page.text, 'html.parser')
 
     total, depDate, retDate = getPrices(depDate, retDate, soup)
     return total, depDate, retDate
