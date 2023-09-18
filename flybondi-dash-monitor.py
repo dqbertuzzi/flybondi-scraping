@@ -1,7 +1,6 @@
 import datetime
 import pandas as pd
 from dash import Dash, html, dash_table, dcc, callback, Output, Input
-import dash_bootstrap_components as dbc
 import plotly.express as px
 from bs4 import BeautifulSoup as bs
 import numpy as np
