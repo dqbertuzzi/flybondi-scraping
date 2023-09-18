@@ -54,7 +54,7 @@ app.layout = html.Div([
     dcc.Store(id="storage", storage_type="memory", data=dff),
     html.Div(children='Monitor de Preços Flybondi - São Paulo x Buenos Aires'),
     html.Br(),
-    dbc.Button("Atualizar os dados",id='refresh-button', n_clicks=0),
+    html.Button("Atualizar os dados (Isso pode levar alguns minutos)",id='refresh-button', n_clicks=0),
     html.Hr(),
     html.Div(children='Escolha Data de Ida e Volta:'),
     html.Br(),
