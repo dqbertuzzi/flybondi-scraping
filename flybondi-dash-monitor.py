@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timezone, timedelta
 import pandas as pd
 from dash import Dash, html, dash_table, dcc, callback, Output, Input
 import plotly.express as px
@@ -13,6 +13,7 @@ dataFrame = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/expo
                                                                                                        'IdaVolta':str})
 
 dff=dataFrame.to_dict('records')
+scraper = FlightPriceScraper(sheet_id)
 
 class FlightPriceScraper:
     def __init__(self, sheet_id):
@@ -71,11 +72,11 @@ app.layout = html.Div([
 )
 def refresh_data(n_clicks):
     if n_clicks:
-        date = (datetime.datetime.now(timezone.utc) - datetime.timedelta(hours=3)).strftime('%d/%m %H:%M')
+        date = (datetime.now(timezone.utc) - timedelta(hours=3)).strftime('%d/%m %H:%M')
         sheet_id = "18hHWaMBcvorBC9TRqBhG2HcGKpRZBdgZh3OqPw8ASus"
         url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
         data_frame = pd.read_csv(url, dtype={'Preco': float, 'DataPesquisada': str, 'IdaVolta': str}, parse_dates=['DataPesquisada'])
-
+    
         dates = [('2023-12-15', '2023-12-21'), ('2023-12-16', '2023-12-22'), ('2023-12-17', '2023-12-23')]
         
         with ThreadPoolExecutor() as executor:
@@ -98,7 +99,7 @@ def update_graph(col_chosen, stored_dataframe, n_clicks):
     
     fig = px.line(dff[dff['IdaVolta']==col_chosen], x='DataPesquisada', y='Preco',
                    color_discrete_sequence =['#25291C'],
-                 labels={"Preco":"Preço (R$)", "DataPesquisada":"Data/Hora Pesquisada"}, title="Histórico de Preços", markers=True, range_x=[(datetime.datetime.now(timezone.utc) - datetime.timedelta(days=3)),(datetime.datetime.now(timezone.utc) + datetime.timedelta(hours=12))])
+                 labels={"Preco":"Preço (R$)", "DataPesquisada":"Data/Hora Pesquisada"}, title="Histórico de Preços", markers=True, range_x=[(datetime.now(timezone.utc) - timedelta(days=3)),(datetime.now(timezone.utc) + timedelta(hours=12))])
     #
     fig.update_traces(marker=dict(size=8),
                   line=dict(width=3))
