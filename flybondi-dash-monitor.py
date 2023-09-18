@@ -7,14 +7,6 @@ import numpy as np
 import requests
 from concurrent.futures import ThreadPoolExecutor
 
-sheet_id = "18hHWaMBcvorBC9TRqBhG2HcGKpRZBdgZh3OqPw8ASus"
-dataFrame = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv", dtype={'Preco':float,
-                                                                                                       'DataPesquisada':str,
-                                                                                                       'IdaVolta':str})
-
-dff=dataFrame.to_dict('records')
-scraper = FlightPriceScraper(sheet_id)
-
 class FlightPriceScraper:
     def __init__(self, sheet_id):
         self.sheet_id = sheet_id
@@ -42,6 +34,14 @@ class FlightPriceScraper:
         total, depDate, retDate = scraper.getPrices(depDate, retDate, soup)
         
         return total, depDate, retDate
+      
+sheet_id = "18hHWaMBcvorBC9TRqBhG2HcGKpRZBdgZh3OqPw8ASus"
+dataFrame = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv", dtype={'Preco':float,
+                                                                                                       'DataPesquisada':str,
+                                                                                                       'IdaVolta':str})
+
+dff=dataFrame.to_dict('records')
+scraper = FlightPriceScraper(sheet_id)
 
 app = Dash(__name__,
           meta_tags=[{'name': 'viewport',
