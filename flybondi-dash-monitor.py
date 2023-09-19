@@ -103,7 +103,7 @@ def update_graph(col_chosen, stored_dataframe, n_clicks):
     #
     fig.update_traces(marker=dict(size=8),
                   line=dict(width=3))
-    fig.update(layout_yaxis_range = [dff[dff['IdaVolta']==col_chosen]['Preco'].min()-8,dff[dff['IdaVolta']==col_chosen]['Preco'].max()+8])
+    fig.update(layout_yaxis_range = [dff[dff['IdaVolta']==col_chosen]['Preco'].min()-8,dff[dff['IdaVolta']==col_chosen]['Preco'].max()+12])
 
     fig.add_scatter(x = [fig.data[0].x[-1]], y = [fig.data[0].y[-1]],
                      mode = 'markers + text',
