@@ -1,9 +1,9 @@
 beautifulsoup4==4.11.1
 dash==2.13.0
-numpy==1.23.5
-pandas==1.5.3
+numpy
+pandas
 plotly==5.9.0
-protobuf==4.24.3
-Requests==2.31.0
+protobuf
+Requests
 dash_bootstrap_components==1.5.0
 gunicorn
