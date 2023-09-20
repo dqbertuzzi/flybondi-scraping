@@ -55,8 +55,8 @@ app.layout = html.Div([
     html.H2('Monitor de Preços Flybondi - São Paulo x Buenos Aires'),
     html.Button("Atualizar os dados (Pode levar alguns minutos)", id='refresh-button', n_clicks=0),
     dcc.Loading(
-            id="loading-output-1",
-            type="dot", color='black'),
+            id="loading-1",
+            type="dot",  children=html.Div(id="loading-output-1"), color='black'),
     html.Hr(),
     html.Div(children='Escolha Data de Ida e Volta:'),
     html.Br(),
