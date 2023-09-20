@@ -1,6 +1,7 @@
 from datetime import datetime, timezone, timedelta
 import pandas as pd
 from dash import Dash, html, dash_table, dcc, callback, Output, Input
+import dash_bootstrap_components as dbc
 import plotly.express as px
 from bs4 import BeautifulSoup as bs
 import numpy as np
@@ -45,7 +46,8 @@ scraper = FlightPriceScraper(sheet_id)
 
 app = Dash(__name__,
           meta_tags=[{'name': 'viewport',
-                            'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}])
+                            'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}],
+          external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 server = app.server
 
@@ -53,18 +55,18 @@ server = app.server
 app.layout = html.Div([
     dcc.Store(id="storage", storage_type="memory", data=dff),
     html.H2('Monitor de Preços Flybondi - São Paulo x Buenos Aires'),
-    html.Button("Atualizar os dados (Pode levar alguns minutos)", id='refresh-button', n_clicks=0),
-    dcc.Loading(
-            id="loading-1",
-            type="dot",  children=html.Div(id="loading-output-1"), color='black'),
+    html.Div(
+        [dbc.Button("Atualizar os dados", color="primary", className="me-1", id='refresh-button', n_clicks=0)],style={'display': 'inline-block', 'vertical-align': 'middle'}),
+    html.Div(
+        [dbc.Spinner(html.Div(id="loading-output-1",style={'display': 'inline-block', 'padding-left': '50px'}))],style={'display': 'inline-block', 'vertical-align': 'middle'}),
     html.Hr(),
     html.Div(children='Escolha Data de Ida e Volta:'),
     html.Br(),
     dcc.Dropdown(options=['15/12/2023 - 21/12/2023', '16/12/2023 - 22/12/2023', '17/12/2023 - 23/12/2023'],
                  value='15/12/2023 - 21/12/2023',
-                 id='my-final-radio-item-example'),
+                 id='my-final-radio-item-example',style={'width':'300px'}),
     dcc.Graph(figure={}, id='my-final-graph-example')
-])
+], style={'margin-left': '2.5vw'})
 
 # Add controls to build the interaction
 @callback(
