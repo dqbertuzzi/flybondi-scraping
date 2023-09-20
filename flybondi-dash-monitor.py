@@ -52,9 +52,11 @@ server = app.server
 # App layout
 app.layout = html.Div([
     dcc.Store(id="storage", storage_type="memory", data=dff),
-    html.Div(children='Monitor de Preços Flybondi - São Paulo x Buenos Aires'),
-    html.Br(),
-    html.Button("Atualizar os dados (Pode levar alguns minutos)",id='refresh-button', n_clicks=0),
+    html.H2('Monitor de Preços Flybondi - São Paulo x Buenos Aires'),
+    html.Button("Atualizar os dados (Pode levar alguns minutos)", id='refresh-button', n_clicks=0),
+    dcc.Loading(
+            id="loading-output-1",
+            type="dot", color='black'),
     html.Hr(),
     html.Div(children='Escolha Data de Ida e Volta:'),
     html.Br(),
@@ -67,6 +69,7 @@ app.layout = html.Div([
 # Add controls to build the interaction
 @callback(
     Output(component_id='storage', component_property='data'),
+    Output("loading-output-1", "children"),
     Input(component_id='refresh-button', component_property='n_clicks'),
     prevent_initial_call=True
 )
