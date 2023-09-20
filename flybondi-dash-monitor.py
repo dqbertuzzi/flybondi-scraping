@@ -88,7 +88,7 @@ def refresh_data(n_clicks):
         for total, depDate, retDate in results:
             data_frame = scraper.appendData(data_frame, total, depDate, retDate, date=date)
         
-    return data_frame.to_dict('records')
+    return data_frame.to_dict('records'), None
         
 @callback(
     Output(component_id='my-final-graph-example', component_property='figure'),
