@@ -54,19 +54,20 @@ server = app.server
 # App layout
 app.layout = html.Div([
     dcc.Store(id="storage", storage_type="memory", data=dff),
-    html.H2('Monitor de Preços Flybondi - São Paulo x Buenos Aires'),
-    html.Div(
-        [dbc.Button("Atualizar os dados", color="primary", className="me-1", id='refresh-button', n_clicks=0)],style={'display': 'inline-block', 'vertical-align': 'middle'}),
-    html.Div(
-        [dbc.Spinner(html.Div(id="loading-output-1",style={'display': 'inline-block', 'padding-left': '50px'}))],style={'display': 'inline-block', 'vertical-align': 'middle'}),
+    html.H2('Monitor de Preços Flybondi'),
+    html.H3('São Paulo x Buenos Aires'),
     html.Hr(),
     html.Div(children='Escolha Data de Ida e Volta:'),
     html.Br(),
     dcc.Dropdown(options=['15/12/2023 - 21/12/2023', '16/12/2023 - 22/12/2023', '17/12/2023 - 23/12/2023'],
                  value='15/12/2023 - 21/12/2023',
                  id='my-final-radio-item-example',style={'width':'300px'}),
-    dcc.Graph(figure={}, id='my-final-graph-example')
-], style={'margin-left': '2.5vw'})
+    dcc.Graph(figure={}, id='my-final-graph-example'),
+    html.Div(
+        [dbc.Button("Atualizar", color="primary", className="me-1", id='refresh-button', n_clicks=0)],style={'display': 'inline-block', 'vertical-align': 'middle'}),
+    html.Div(
+        [dbc.Spinner(html.Div(id="loading-output-1",style={'display': 'inline-block', 'padding-left': '50px'}))],style={'display': 'inline-block', 'vertical-align': 'middle'}),
+],style={'margin-left': '2.5vw', 'margin-top': '2.5vw'})
 
 # Add controls to build the interaction
 @callback(
@@ -96,7 +97,7 @@ def refresh_data(n_clicks):
     Output(component_id='my-final-graph-example', component_property='figure'),
     Input(component_id='my-final-radio-item-example', component_property='value'),
     Input("storage", "data"),
-    Input(component_id='refresh-button', component_property='n_clicks')
+    Input(component_id='refresh-button', component_property='n_clicks'), allow_duplicate=True
 )
 def update_graph(col_chosen, stored_dataframe, n_clicks):
     dff = pd.DataFrame.from_records(stored_dataframe)
@@ -104,22 +105,22 @@ def update_graph(col_chosen, stored_dataframe, n_clicks):
     
     fig = px.line(dff[dff['IdaVolta']==col_chosen], x='DataPesquisada', y='Preco',
                    color_discrete_sequence =['#25291C'],
-                 labels={"Preco":"Preço (R$)", "DataPesquisada":"Data/Hora Pesquisada"}, title="Histórico de Preços", markers=True, range_x=[(datetime.now(timezone.utc) - timedelta(days=3)),(datetime.now(timezone.utc) + timedelta(hours=12))])
+                 labels={"Preco":"Preço (R$)", "DataPesquisada":"Data/Hora Pesquisada"}, title="Histórico de Preços", markers=True, range_x=[(datetime.now(timezone.utc) - timedelta(days=3)),(datetime.now(timezone.utc) + timedelta(hours=18))])
     #
-    fig.update_traces(marker=dict(size=8),
+    fig.update_traces(marker=dict(size=6),
                   line=dict(width=3))
-    fig.update(layout_yaxis_range = [dff[dff['IdaVolta']==col_chosen]['Preco'].min()-8,dff[dff['IdaVolta']==col_chosen]['Preco'].max()+12])
+    fig.update(layout_yaxis_range = [dff[dff['IdaVolta']==col_chosen]['Preco'].min()-20,dff[dff['IdaVolta']==col_chosen]['Preco'].max()+50])
 
     fig.add_scatter(x = [fig.data[0].x[-1]], y = [fig.data[0].y[-1]],
                      mode = 'markers + text',
-                     marker = {'color':'black', 'size':14},
+                     marker = {'color':'black', 'size':12},
                      showlegend = False,
                      text = [fig.data[0].y[-1]],
-                     textposition='top center')
-    fig.update_traces(textfont_size=14)
+                     textposition='middle right')
+    fig.update_traces(textfont_size=16)
     fig.update_xaxes(rangeslider_visible=True)
-
-
+    fig.update_layout(margin=dict(l=20, r=20, t=50, b=50))
+    
     return fig
 
 
