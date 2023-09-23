@@ -62,12 +62,13 @@ app.layout = html.Div([
     dcc.Dropdown(options=['15/12/2023 - 21/12/2023', '16/12/2023 - 22/12/2023', '17/12/2023 - 23/12/2023'],
                  value='15/12/2023 - 21/12/2023',
                  id='my-final-radio-item-example',style={'width':'300px'}),
-    dcc.Graph(figure={}, id='my-final-graph-example'),
+    dcc.Graph(figure={}, id='my-final-graph-example',
+              config={'displayModeBar': False}),
     html.Div(
         [dbc.Button("Atualizar", color="primary", className="me-1", id='refresh-button', n_clicks=0)],style={'display': 'inline-block', 'vertical-align': 'middle'}),
     html.Div(
         [dbc.Spinner(html.Div(id="loading-output-1",style={'display': 'inline-block', 'padding-left': '50px'}))],style={'display': 'inline-block', 'vertical-align': 'middle'}),
-],style={'margin-left': '2.5vw', 'margin-top': '2.5vw'})
+],style={'margin-left': '2.5vw', 'margin-top': '2.5vw', 'margin-bottom': '2.5vw', 'margin-right':'2.5vw'})
 
 # Add controls to build the interaction
 @callback(
@@ -103,6 +104,7 @@ def update_graph(col_chosen, stored_dataframe, n_clicks):
     dff = pd.DataFrame.from_records(stored_dataframe)
     dff['DataPesquisada'] = [i.replace(year=2023) for i in pd.to_datetime(dff['DataPesquisada'], format='%d/%m %H:%M')]
     
+    config = {'displayModeBar': False}
     fig = px.line(dff[dff['IdaVolta']==col_chosen], x='DataPesquisada', y='Preco',
                    color_discrete_sequence =['#25291C'],
                  labels={"Preco":"Preço (R$)", "DataPesquisada":"Data/Hora Pesquisada"}, title="Histórico de Preços", markers=True, range_x=[(datetime.now(timezone.utc) - timedelta(days=3)),(datetime.now(timezone.utc) + timedelta(hours=18))])
