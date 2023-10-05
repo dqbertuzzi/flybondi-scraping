@@ -15,6 +15,8 @@ Python: Programming language used to develop the scraper.
 
 Requests, Beautiful Soup: Libraries used to automate navigation on the Flybondi website, parsing and extracting the collected data.
 
+Google Drive API: API provided by Google to integrate Google Drive functionality into the application. This will allow us to manage files and interact with Google Drive from the Python application.
+
 Plotly, Dash: Graphic library and framework for building data apps in Python.
 
 Render: Platform used to host and display the dashboard with the collected data.
